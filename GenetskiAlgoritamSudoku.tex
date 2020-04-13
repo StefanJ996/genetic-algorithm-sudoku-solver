@@ -19,6 +19,7 @@
 \usepackage{mathtools}
 \usepackage{dirtytalk}
 \usepackage{epigraph}
+\usepackage{amssymb}
 
 
 %\newtheorem{primer}{Пример}[section] %ćirilični primer
@@ -98,12 +99,12 @@ Sudoku slagalica po pravilu ima samo \textbf{jedno moguće rešenje} (može ih i
 \begin{figure}[h]
 
 \begin{subfigure}{0.5\textwidth}
-\includegraphics[width=0.9\linewidth, height=5cm]{primer_sudoku_neresen.png} 
+\includegraphics[width=0.8\linewidth, height=5cm]{primer_sudoku_neresen.png} 
 \caption{Početna Sudoku postavka}
 \label{fig:subim1}
 \end{subfigure}
 \begin{subfigure}{0.5\textwidth}
-\includegraphics[width=0.9\linewidth, height=5cm]{primer_sudoku_resen.png}
+\includegraphics[width=0.8\linewidth, height=5cm]{primer_sudoku_resen.png}
 \caption{Rešena Sudoku slagalica}
 \label{fig:subim2}
 \end{subfigure}
@@ -114,6 +115,103 @@ Sudoku slagalica po pravilu ima samo \textbf{jedno moguće rešenje} (može ih i
 
 \subsection{Sudoku i algoritmi}
 Činjenica da niko ne zna algoritam kojim se uvek dolazi do rešenja bez prethodnog isprobavanja ogromnog broja kombinacija stavlja Sudoku u klasu tzv. NP-potpunih problema. Za rešavanje ove igre mogu se koristiti razni algoritmi, među kojima prednjači \textbf{backtracking} posebno za rešavanje “težih” slagalica kao i onih dimenzija $9\times9$. Takođe, koriste se i prirodom inspirisani optimizacijski algoritmi- genetski algoritam, simulirano kaljenje, optimizacija rojem čestica itd. \textbf{Genetski algoritmi} su se pokazali kao vrlo efikasni u rešavanju NP problema, međutim za rešavanje Sudoku i nisu baš efikasni (spora konvergencija, nemogućnost izlaska iz lokalnih minimuma ...)
+
+
+\subsection{Genetski algoritam}
+\vspace{5mm} 
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.36]{GA.jpg}
+    \caption{Faze genetskog algoritma}
+    \label{fig:genetic algorithm}
+\end{figure}
+\\
+\textbf{Genetski algoritam} je pretraživačka optimimizaciona tehnika, zasnovana na principima genetike i prirodne selekcije. Pripada većoj klasi evolucionih algoritama. Koristi se da se nađu optimalna ili priblizno-optimalna rešenja za teške probleme. Često se koristi za rešavanje optimizacionih problema, u istraživanjima i u mašinskom učenju. \\
+
+\subsection{Faze genetskog algoritma}
+\vspace{5mm} 
+Na prethodnoj fotografiji imamo slikoviti prikaz faza genetskog algoritma. One su:
+\begin{enumerate}
+	\item \textbf{Inicijalizacija populacije (kodiranje):}
+	\begin{itemize}
+	    \item Svaki \textbf{gen} predstavlja parametar u okviru rešenja.
+        \item Ovaj skup parametara koji formira rešenje naziva se \textbf{hromozom}.
+        \item \textbf{Populacija} je kolekcija hromozoma.
+        \item Redosled gena u hromozomu je bitan.
+        \item Uglavnom, hromozomi su prikazani u binarnim formatima kao 0 i 1, ali moguća su i drugačija kodiranja.
+    \end{itemize}
+    
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.3]{oznake.jpg}
+    \caption{Osnovni pojmovi GA}
+    \label{fig:parts}
+\end{figure}
+	     
+    \item \textbf{Funkcija fitnesa:}
+    \begin{itemize}
+	    \item Od raspoloživih hromozoma moramo odabrati one koji su najbolji za reprodukciju potomka, tako da se svakom hromozomu daje fitnes vrednost .
+        \item Fitness vrednost pomaže u odabiru pojedinaca koji će se koristiti za reprodukciju.
+        \item  Funkcija za fitnes je definisana u genetskoj reprezentaciji i meri kvalitet predstavljenog rešenja i ona uvek zavisi od problema.
+        \item U nekim slučajevima, teško je ili nemoguće odredititi fitnes. 
+    \end{itemize}
+     
+    \item \textbf{Selekcija:}
+    \begin{itemize}
+	    \item Tokom svake sledeće generacije deo postojeće populacije je izabran da odgoji novu generaciju.
+        \item  Individualna rešenja su izabrana pomoču procesa baziranog na fitnesu(zdravlju), gde više fit(zdravija, sa boljom kondicijom) rešenja(merena fitnes funkcijom) imaju veće šanse da budu izabrana. Određene metode selekcije ocenjuju kondiciju svakog rešenja i prvenstveno će izabrati najbolja rešenja.
+        \item U procesu selekcije, bira se hromozom za reprodukciju.
+    \end{itemize}
+
+    \item \textbf{Reprodukcija:}
+    Pravljenje potomstva se dešava na dva načina: \textbf{Ukrštanjem} i \textbf{Mutacijom}
+        \begin{enumerate}
+             \item Ukrštanje je najbitnija faza u genetskom algoritmu. Tokom crossover-a, bira se slučajna tačka i onda se ukršta par roditelja kako bi nastali potomci. Postoje 3 glavne vrste ukrštanja:
+            \begin{enumerate}
+                \item \textbf{Jednopoziciono ukrštanje:} Tačka na hromozomima oba roditelja bira se nasumično i označava se kao „crossover tačka“. Bitovi desno od te tačke razmenjuju se između dva matična hromozoma. 
+                \item \textbf{Dvopoziciono ukrštanje:}Dve tačke ukrštanja izabrane su nasumično iz roditeljskih hromozoma. Bitovi između dve tačke se menjaju između roditelja
+                \item \textbf{Uniformno ukrštanje:} U uniformnom ukrštanju, obično se svaki bit bira između bilo kog roditelja s jednakom verovatnoćom. 
+            \end{enumerate}
+        Na kraju ukrštanja novo potomstvo se dodaje populaciji.
+        
+            \item \textbf{Mutacija:}
+            U nekoliko formiranih novih potomaka, neki od njihovih gena mogu se podvrgnuti mutacijama uz malu slučajnu verovatnoću. Ovo ukazuje da se neki bitovi u hromozomu mogu okrenuti. Mutacije se rade da bi se održala raznolikosti populacije i da bi se sprečila preuranjena konvergencija. 
+        \end{enumerate}
+      
+    \item \textbf{Konvergencija (kriterijum zaustavljanja):}\\
+    Nekoliko pravila koja slede govore o tome kada se treba zaustaviti:
+    \begin{itemize}
+	    \item Kada ne dođe do poboljšanja kvaliteta rešenja nakon završetka određenog broja generacija zadatih unapred. 
+        \item  Broj generacija je dostigao maksimalan broj generacija.
+        \item Sličnost između jedinki u okviru jedne generacije je prevelika.
+        \item Kada se dobije prihvatljivo rešenje.
+
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Prednosti i mane genetskog algoritma}
+\renewcommand\labelitemii{$\square$}
+\begin{itemize}
+   \item \textbf{Prednosti GA:}
+        \begin{itemize}
+             \item Ne zahteva nikakve derivatne informacije (koje možda nisu dostupne za mnoge probleme u stvarnom svetu).
+             \item Brži je i efikasniji u poređenju sa tradicionalnim metodama. 
+             \item Ima vrlo dobre paralelne mogućnosti.
+             \item Optimizira i kontinuirane i diskretne funkcije, kao i više objektivne probleme. 
+             \item Pruža listu „dobrih“ rešenja, a ne samo jedno rešenje. 
+             \item Uvek dobije odgovor na problem koji se vremenom popravlja. 
+             \item Korisno kada je prostor za pretragu veoma velik i ako je uključen veliki broj  ‘ parametara. 
+        \end{itemize}
+   \item \textbf{Mane GA:}
+        \begin{itemize}
+             \item Nisu pogodni za sve probleme, posebno probleme koji su jednostavni i za koje su izvedene informacije o derivatima. 
+             \item Vrednost fitnesa izračunava se više puta, što može biti skupo. 
+             \item Budući da je stohastičan, nema garancija za optimalnost ili kvalitet rešenja.
+             \item Ako se ne sprovede pravilno, GA se možda neće približiti optimalnom rešenju.
+        \end{itemize}
+   
+\end{itemize}
+
 
 
 
